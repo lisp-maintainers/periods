@@ -30,6 +30,10 @@ html: periods.texi docstrings
 html-local:
 	sed -i "s@https://lisp-maintainers.github.io/periods@@g" index.html
 
+# Works best on the gh-pages branch.
+html-local:
+	sed -i "s@https://lisp-maintainers.github.io/periods@@g" index.html
+
 pdf: periods.texi docstrings
 	texi2pdf periods.texi
 
