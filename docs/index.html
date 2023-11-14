@@ -1,0 +1,797 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (c) 2007, John Wiegley.  All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+- Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+
+- Neither the name of New Artisans LLC nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head> <script type="text/javascript" src="https://lisp-maintainers.github.io/periods/static/highlight-lisp.js"></script> <link rel="stylesheet" href="https://lisp-maintainers.github.io/periods/static/github.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Periods: A library for manipulating time</title>
+
+<meta name="description" content="Periods: A library for manipulating time">
+<meta name="keywords" content="Periods: A library for manipulating time">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="dir.html#Top" rel="up" title="(dir)">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Periods: A library for manipulating time</h1>
+
+
+
+
+
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-Introduction-1" href="#Introduction">1 Introduction</a></li>
+  <li><a id="toc-Installation-1" href="#Installation">2 Installation</a></li>
+  <li><a id="toc-Fixed-time-1" href="#Fixed-time">3 Fixed time</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Helper-functions-1" href="#Helper-functions">3.1 Helper functions</a></li>
+  </ul></li>
+  <li><a id="toc-Time-durations-1" href="#Time-durations">4 Time durations</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Looping-over-durations" href="#Looping-over-durations">4.1 Looping over durations</a></li>
+    <li><a id="toc-Duration-helper-functions" href="#Duration-helper-functions">4.2 Duration helper functions</a></li>
+  </ul></li>
+  <li><a id="toc-Relative-time-1" href="#Relative-time">5 Relative time</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Helper-functions-for-the-current-date" href="#Helper-functions-for-the-current-date">5.1 Helper functions for the current date</a></li>
+  </ul></li>
+  <li><a id="toc-Time-ranges-1" href="#Time-ranges">6 Time ranges</a></li>
+  <li><a id="toc-Time-periods-1" href="#Time-periods">7 Time periods</a></li>
+  <li><a id="toc-General-purpose" href="#General-purpose">8 General purpose</a></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Next: <a href="#Introduction" accesskey="n" rel="next">Introduction</a>, Previous: <a href="dir.html#Top" accesskey="p" rel="prev">(dir)</a>, Up: <a href="dir.html#Top" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Overview"></span><h1 class="top">Overview</h1>
+
+<p>Welcome to the <small>PERIODS</small> library.  The intention of this code is to
+provide a convenient set of utilities for manipulating times,
+distances between times, and both contiguous and discontiguous ranges
+of time.  By combining these facilities in various ways, almost any
+type of time expression is possible.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Introduction" accesskey="1">Introduction</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Installation" accesskey="2">Installation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Fixed-time" accesskey="3">Fixed time</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Time-durations" accesskey="4">Time durations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Relative-time" accesskey="5">Relative time</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Time-ranges" accesskey="6">Time ranges</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Time-periods" accesskey="7">Time periods</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="Introduction"></span><div class="header">
+<p>
+Next: <a href="#Installation" accesskey="n" rel="next">Installation</a>, Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Introduction-1"></span><h2 class="chapter">1 Introduction</h2>
+
+<p>Consider you are writing a calendaring application which must
+support the idea of recurring tasks.  Often, people using a calendar
+have very certain ideas of what type of recurrence they want&mdash;but it
+is not always easy to calculate.  Say they are entering their pay
+days; this could either fall bi-weekly, the second Friday of every
+month, or every 15 days, but the following Monday if that day falls on
+a weekend.  How is your code to calculate these moments in time,
+without resorting to contortionist uses of <code>encode-universal-time</code> and <code>decode-universal-time</code>?
+</p>
+<p>By way of a brief introduction to the following sections, here is
+how each of the above time expressions would be calculated.  The first
+three occurrences of each are shown, starting from &lsquo;<samp>Sun, 18 Nov
+2007</samp>&rsquo;. This code generates a list of dates occurring bi-weekly,
+or every 14 days, until next year:
+</p>
+<div class="lisp">
+<pre><code class="lisp">;; The date is written with (local-time:enable-read-macros)
+(list-times @2007-11-18 (duration :days 14) (next-year))
+;; &rArr;
+@2007-12-02T01:00:00.000000+01:00
+@2007-12-16T01:00:00.000000+01:00
+@2007-12-30T01:00:00.000000+01:00
+@2008-01-13T01:00:00.000000+01:00
+…
+</code></pre></div>
+
+<p>And this code, using the system <code>:period-series</code>, generates an unbounded series occurring bi-weekly,
+or every 14 days:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(scan-times @2007-11-18 (duration :days 14))
+   &rArr; #Z(@2007-12-02 @2007-12-16 @2007-12-30 &hellip;)
+</code></pre></div>
+
+<p>This next example is a bit more involved, as it unifies the idea
+of <code>duration</code>-based time stepping (monthly) with
+<code>relative-time</code>.  The result is an unbounded sequence
+representing the second Friday of every month.
+</p>
+<div class="lisp">
+<pre><code class="lisp">(mapping ((time (scan-times (previous-time @2007-11-18
+                                           (relative-time :day 1))
+                            (duration :months 1))))
+  (next-time (next-time time (relative-time :day-of-week 5)
+                        :accept-anchor t)
+             (relative-time :day-of-week 5)))
+  &rArr; #Z(@2007-12-14 @2008-01-11 @2008-02-08 &hellip;)
+</code></pre></div>
+
+<p>To read this example briefly: Beginning with the first day
+of the current month, advance forward one month <em>ad infinitum</em>.
+For each new month, scan forward to the first Friday (accepting the
+first day if it is Friday, with <code>:accept-anchor</code>).  Then scan to
+the Friday after that.
+</p>
+<p>In the next example, we want to step through time every 15 days,
+but select the following Monday if the 15th day falls on a weekend.
+</p>
+<div class="lisp">
+<pre><code class="lisp">(mapping ((time (scan-times @2007-11-03 (duration :days 15))))
+  (if (falls-on-weekend-p time)
+      (next-time time (relative-time :day-of-week 1))
+      time))
+  &rArr; #Z(@2007-11-19 @2007-12-03 @2007-12-18 &hellip;)
+</code></pre></div>
+
+<p>The starting time for this example is set to
+&lsquo;<samp>3 Nov 2007</samp>&rsquo;, so that Monday-shifting could be demonstrated.
+Note how the shift does not disrupt the regular 15-day cycle, it
+merely causes the paycheck to be delivered one day late in that
+instance.
+</p>
+<p>Hopefully this gives an idea of the power and flexibility of the
+periods library, especially if used in combination with the
+<small>SERIES</small> library<a id="DOCF1" href="#FOOT1"><sup>1</sup></a>,
+since times are naturally expressable as an unbounded series supporting
+lazy calculation.
+</p>
+<hr>
+<span id="Installation"></span><div class="header">
+<p>
+Next: <a href="#Fixed-time" accesskey="n" rel="next">Fixed time</a>, Previous: <a href="#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Installation-1"></span><h2 class="chapter">2 Installation</h2>
+
+<p>The <small>PERIODS</small> library depends on two required dependencies:
+</p>
+<ul>
+<li> local-time 0.9.2 or later
+</li><li> cl-fad 0.6.0 or later (this is a dependency of local-time)
+</li><li> series 2.2.9 or later
+</li></ul>
+
+<p>If you also wish to use the <small>SERIES</small> library with <small>PERIODS</small>,
+it must be installed as well, version 2.2.9 or later.
+</p>
+<p>The recommended way to install the library is to use Quicklisp,
+which installs the dependencies automatically.
+</p>
+<p>Here is how to load the basic <small>PERIODS</small> library:
+</p>
+<table class="cartouche" border="1"><tr><td>
+<div class="example">
+<pre class="example">* (ql:quickload :periods)
+</code></pre></div>
+</td></tr></table>
+
+<p>Loading the series-enabled <small>PERIODS</small> functions:
+</p>
+<table class="cartouche" border="1"><tr><td>
+<div class="example">
+<pre class="example">* (ql:quickload :period-series)
+</code></pre></div>
+</td></tr></table>
+
+<hr>
+<span id="Fixed-time"></span><div class="header">
+<p>
+Next: <a href="#Time-durations" accesskey="n" rel="next">Time durations</a>, Previous: <a href="#Installation" accesskey="p" rel="prev">Installation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Fixed-time-1"></span><h2 class="chapter">3 Fixed time</h2>
+
+<p>The most basic element of time used by the <small>PERIODS</small> library is the
+<code>fixed-time</code> structure.  At present, this is just a type alias
+for <code>local-time</code> structures<a id="DOCF2" href="#FOOT2"><sup>2</sup></a>, so all of the
+operations possible on a <code>local-time</code> are applicable to a
+<code>fixed-time</code>.  In addition, <code>fixed-time</code>’s may be
+constructed by a convenience function of the same name, which allows
+for quickly creating time structures anchored in the current year.
+</p>
+<span id="Function-fixed_002dtime"></span><dl>
+<dt id="index-fixed_002dtime">Function: <strong>fixed-time</strong> <em>&amp;rest args</em></dt>
+<dd><span id="index-fixed_002dtime-1"></span>
+<p>Return a fixed point in time relative to the time of the call.  <code>args</code> is a
+property list giving a specific precision for the return value.
+</p>
+<p>If the keyword argument <code>:now</code> is given, all else is ignored; this is
+equivalent to calling <code>local-time:now</code>.
+</p>
+<p>Otherwise, any keyword arguments given override their corresponding elements
+in the current time.  Further, any elements smaller in resolution than the
+finest specified element are reduced to 0 or 1, according to their position.
+</p>
+<p>For example, assuming the current time is &quot;@2007-11-17T23:02:00.000&quot;,
+compare these outputs:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(fixed-time :month 4) ;; &rArr; @2007-04-01T00:00:00.000
+(fixed-time :day 10)  ;; &rArr; @2007-11-10T00:00:00.000
+(fixed-time :hour 15) ;; &rArr; @2007-11-17T15:00:00.000
+</code></pre></div>
+
+<p>This behavior makes it very easy to return a fixed time for &quot;april of this
+year&quot;, etc.  If you wish to determine the date of the previous April, while
+preserving the current day of the month, hour of the day, etc., then see the
+function <code>previous-time</code>.
+</p></dd></dl>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Helper-functions" accesskey="1">Helper functions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="Helper-functions"></span><div class="header">
+<p>
+Previous: <a href="#Fixed-time" accesskey="p" rel="prev">Fixed time</a>, Up: <a href="#Fixed-time" accesskey="u" rel="up">Fixed time</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Helper-functions-1"></span><h3 class="section">3.1 Helper functions</h3>
+
+<p>There are a few helper functions for performing common operations on
+<code>fixed-time</code>’s:
+</p>                
+<dl>
+<dt id="index-year_002dof">Function: <strong>year-of</strong> <em>fixed-time</em></dt>
+<dt id="index-month_002dof">Function: <strong>month-of</strong> <em>fixed-time</em></dt>
+<dt id="index-day_002dof">Function: <strong>day-of</strong> <em>fixed-time</em></dt>
+<dt id="index-hour_002dof">Function: <strong>hour-of</strong> <em>fixed-time</em></dt>
+<dt id="index-minute_002dof">Function: <strong>minute-of</strong> <em>fixed-time</em></dt>
+<dt id="index-second_002dof">Function: <strong>second-of</strong> <em>fixed-time</em></dt>
+<dt id="index-millisecond_002dof">Function: <strong>millisecond-of</strong> <em>fixed-time</em></dt>
+<dd><p>Return the corresponding detail associated with a given
+<code>fixed-time</code>.  All results are of type <code>fixnum</code>.
+</p></dd></dl>
+                
+<span id="Function-day_002dof_002dweek"></span><dl>
+<dt id="index-day_002dof_002dweek">Function: <strong>day-of-week</strong> <em>fixed-time</em></dt>
+<dd><span id="index-day_002dof_002dweek-1"></span>
+<p>Return the day of the week associated with a given <code>fixed-time</code>.
+The result is a <code>fixnum</code> with 0 representing Sunday, through 6 on Saturday.
+</p></dd></dl>
+<span id="Function-falls_002don_002dweekend_002dp"></span><dl>
+<dt id="index-falls_002don_002dweekend_002dp">Function: <strong>falls-on-weekend-p</strong> <em>fixed-time</em></dt>
+<dd><span id="index-falls_002don_002dweekend_002dp-1"></span>
+<p>Return <code>t</code> if the given <code>fixed-time</code> occurs on a Saturday or Sunday.
+</p></dd></dl>
+<span id="Function-current_002dyear"></span><dl>
+<dt id="index-current_002dyear">Function: <strong>current-year</strong></dt>
+<dd><span id="index-current_002dyear-1"></span>
+<p>Return the current year as a <code>fixnum</code>.
+</p></dd></dl>
+<span id="Function-leapp"></span><dl>
+<dt id="index-leapp">Function: <strong>leapp</strong> <em>year</em></dt>
+<dd><span id="index-leapp-1"></span>
+<p>Return <code>t</code> if <code>year</code> falls on a leap year.
+</p></dd></dl>
+<span id="Function-days_002din_002dmonth"></span><dl>
+<dt id="index-days_002din_002dmonth">Function: <strong>days-in-month</strong> <em>month &amp;optional year</em></dt>
+<dd><span id="index-days_002din_002dmonth-1"></span>
+<p>Returns the number of days in the given month of the specified year.
+</p></dd></dl>
+<span id="Function-floor_002dtime"></span><dl>
+<dt id="index-floor_002dtime">Function: <strong>floor-time</strong> <em>fixed-time &amp;optional resolution</em></dt>
+<dd><span id="index-floor_002dtime-1"></span>
+<p>Reduce a fixed time to be no finer than <code>resolution</code>.
+</p>
+<p>For example, if the date is 2007-04-20, and the resolution is :month, the
+date is floored to 2007-04-01.  Anything smaller than the resolution is
+reduced to zero (or 1, if it is a day or month being reduced).
+</p></dd></dl>
+<span id="Function-find_002dsmallest_002dresolution"></span><dl>
+<dt id="index-find_002dsmallest_002dresolution">Function: <strong>find-smallest-resolution</strong> <em>step-by</em></dt>
+<dd><span id="index-find_002dsmallest_002dresolution-1"></span>
+<p>Examine the property list <code>step-by</code> and return the smallest unit of time
+specified.
+</p>
+<p>For example, given the following property list:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(:DAY 10 :HOUR 5 :MINUTE 2)
+</code></pre></div>
+
+<p>The result is <code>:minute</code>.
+</p></dd></dl>
+<span id="Function-add_002dtime"></span><dl>
+<dt id="index-add_002dtime">Function: <strong>add-time</strong> <em>fixed-time duration &amp;key reverse</em></dt>
+<dd><span id="index-add_002dtime-1"></span>
+<p>Given a <code>fixed-time</code>, add the supplied <code>duration</code>.
+</p>
+<p>Example (reader notation requires calling LOCAL-TIME:ENABLE-READ-MACROS):
+</p>
+<div class="lisp">
+<pre><code class="lisp">(add-time @2007-05-20T12:10:10.000 (duration :hours 50))
+  ;; &rArr; @2007-05-22T14:10:10.000
+</code></pre></div>
+
+<p><code>note:</code> This function always adds the largest increments first, so:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(add-time @2003-01-09 (duration :years 1 :days 20)) ;; &rArr; @2004-02-29
+</code></pre></div>
+
+<p>If days has been added before years, the result would have been
+&quot;@2004-03-01&quot;.
+</p></dd></dl>
+<span id="Function-time_002ddifference"></span><dl>
+<dt id="index-time_002ddifference">Function: <strong>time-difference</strong> <em>left right</em></dt>
+<dd><span id="index-time_002ddifference-1"></span>
+<p>Compute the duration existing between fixed-times <code>left</code> and <code>right</code>.
+</p>
+<p>The order of left or right is ignored; the returned <code>duration</code>, if added to
+the earlier value, will result in the later.
+</p>
+<p>A complexity of this process which might surprise some is that larger
+quantities are added by <code>add-time</code> before smaller quantities.  For example, what
+is the difference between 2003-02-10 and 2004-03-01?  If you add years before
+days, the difference is 1 year and 20 days.  If you were to add days before
+years, however, the difference would be 1 year and 21 days.  The question, do
+you advance to 2004 and then calculate between 2-10 and 3-01, or do you move
+from 2-10 to 3-01, and then increment the year?  This library chooses to add
+years before days, since this follows human reckoning a bit closer (i.e., a
+person would likely flip to the 2004 calendar and then start counting off
+days, rather than the other way around).  This difference in reckoning can be
+tricky, however, so bear this in mind.
+</p></dd></dl>
+
+<hr>
+<span id="Time-durations"></span><div class="header">
+<p>
+Next: <a href="#Relative-time" accesskey="n" rel="next">Relative time</a>, Previous: <a href="#Fixed-time" accesskey="p" rel="prev">Fixed time</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Time-durations-1"></span><h2 class="chapter">4 Time durations</h2>
+
+<p>The basic element is the <code>duration</code> structure. It has the slots <code>years, months, days, hours, minutes, seconds</code> down to nanoseconds.
+</p>
+<p>Create a duration with the <code>duration</code> function. It accepts a key argument for each slot:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(duration :days 3)
+;; =&gt;
+#S(DURATION
+   :YEARS 0
+   :MONTHS 0
+   :DAYS 3
+   :HOURS 0
+   :MINUTES 0
+   :SECONDS 0
+   :MILLISECONDS 0
+   :MICROSECONDS 0
+   :NANOSECONDS 0)
+</code></pre></div>
+
+<span id="Function-duration"></span><dl>
+<dt id="index-duration">Function: <strong>duration</strong> <em>&amp;rest args</em></dt>
+<dd><span id="index-duration-1"></span>
+<p>Create a <code>duration</code> object.
+</p>
+<p>One thing to note about duration: there is no way to determine the total
+length of a duration in terms of any specific time quantity, without first
+binding that duration to a fixed point in time (after all, how many days are
+in a month if you don&rsquo;t know which month it is?)  Therefore, those looking for
+a function like &quot;duration-seconds&quot; are really wanting to work with ranges,
+not just durations.
+</p></dd></dl>
+
+<p>Access each duration slot with its accessor: <code>duration-days</code> and so on.
+</p>
+<span id="Looping-over-durations"></span><h3 class="section">4.1 Looping over durations</h3>
+
+<span id="Macro-do_002dtimes"></span><dl>
+<dt id="index-do_002dtimes">Macro: <strong>do-times</strong> <em>(var start duration end &amp;optional result) &amp;body body</em></dt>
+<dd><span id="index-do_002dtimes-1"></span>
+<p>Evaluate body where <code>var</code> is bound to a time starting at <code>start</code> <code>+</code> <code>duration</code>, separated by <code>duration</code>, until and excluding <code>end</code>.
+</p>
+<p>A &rsquo;do&rsquo; style version of the functional <code>map-times</code> macro.
+</p>
+<p>The disadvantage to <code>do-times</code> is that there is no way to ask for a reversed
+time sequence, or specify an inclusive endpoint.
+</p>
+<p>Return <code>nil</code>.
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre><code class="lisp">;; when now is @2023-11-14T09:05:00
+(do-times (time (now)
+              (duration :hours 1)
+              (next-day))
+  (print time))
+;; =&gt;
+@2023-11-14T10:04:31.475324+01:00
+@2023-11-14T11:04:31.475324+01:00
+@2023-11-14T12:04:31.475324+01:00
+[…]
+@2023-11-14T23:04:31.475324+01:00
+NIL
+</code></pre></div>
+</dd></dl>
+<span id="Macro-map_002dtimes"></span><dl>
+<dt id="index-map_002dtimes">Macro: <strong>map-times</strong> <em>callable start duration end &amp;key reverse inclusive-p</em></dt>
+<dd><span id="index-map_002dtimes-1"></span>
+<p>Map over a set of times separated by <code>duration</code>, calling <code>callable</code> with the
+start of each.
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre><code class="lisp">  (map-times #'print (now) (duration :hours 1) (next-day))
+</code></pre></div>
+</dd></dl>
+
+<span id="Duration-helper-functions"></span><h3 class="section">4.2 Duration helper functions</h3>
+
+<span id="Function-add_002dduration"></span><dl>
+<dt id="index-add_002dduration">Function: <strong>add-duration</strong> <em>left right</em></dt>
+<dd><span id="index-add_002dduration-1"></span>
+<p>Add one duration to another.
+</p></dd></dl>
+<span id="Function-subtract_002dduration"></span><dl>
+<dt id="index-subtract_002dduration">Function: <strong>subtract-duration</strong> <em>left right</em></dt>
+<dd><span id="index-subtract_002dduration-1"></span>
+<p>Subtract one duration from another.
+</p></dd></dl>
+<dl>
+<dt id="index-multiply_002dduration">Function: <strong>multiply-duration</strong> <em>left multiplier</em></dt>
+<dd><span id="index-multiply_002dduration-1"></span>
+<p>Multiply one duration to another.
+</p></dd></dl>
+
+<hr>
+<span id="Relative-time"></span><div class="header">
+<p>
+Next: <a href="#Time-ranges" accesskey="n" rel="next">Time ranges</a>, Previous: <a href="#Time-durations" accesskey="p" rel="prev">Time durations</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Relative-time-1"></span><h2 class="chapter">5 Relative time</h2>
+
+<p>A relative time allows to work with ranges.
+</p>
+<p>A <code>relative-time</code> structure has the slots <code>year, month, week, day-of-week, day, hour, minute, second</code> down to nanosecond.
+</p>
+<span id="Function-next_002dtime"></span><dl>
+<dt id="index-next_002dtime">Function: <strong>next-time</strong> <em>anchor relative-time &amp;key reverse accept-anchor recursive-call</em></dt>
+<dd><span id="index-next_002dtime-1"></span>
+<p>Compute the first time after <code>fixed-time</code> which matches <code>relative-time</code>.
+</p>
+<p>This function finds the first moment after <code>fixed-time</code> which honors every
+element in <code>relative-time:</code>
+</p>
+<div class="lisp">
+<pre><code class="lisp">(next-time @2007-05-20 (relative-time :month 3)) ;; &rArr; @2008-03-20
+</code></pre></div>
+
+<p>The relative time constructor arguments may also be symbolic:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(relative-time :month :this)
+(relative-time :month :next)
+(relative-time :month :prev)
+</code></pre></div>
+
+<p>To find the date two weeks after next February, a combination of <code>next-time</code>
+and <code>add-time</code> must be used, since &quot;next February&quot; is a relative time concept,
+while &quot;two weeks&quot; is a duration concept:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(add-time (next-time @2007-05-20 (relative-time :month 2))
+  (duration :days 14))
+</code></pre></div>
+
+<p><code>note:</code> The keyword arguments to <code>relative-time</code> are always singular; those to
+<code>duration</code> are always plural.
+</p>
+<p>The following form resolves to the first sunday of the given year:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(next-time (previous-time @2007-05-20
+                  (relative-time :month 1 :day 1))
+   (relative-time :week-day 0))
+</code></pre></div>
+
+<p>This form finds the first Friday the 13th after today:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(next-time @2007-05-20 (relative-time :day 13 :day-of-week 5))
+</code></pre></div>
+
+<p><code>note:</code> When adding times, <code>next-time</code> always seeks the next time that fully
+honors your request.  If asked for Feb 29, the year of the resulting time will
+fall in a leap year.  If asked for Thu, Apr 29, it returns the next occurrence
+of Apr 29 which falls on a Friday.  Example:
+</p>
+<div class="lisp">
+<pre><code class="lisp">(next-time @2007-11-01
+   (relative-time :month 4 :day 29 :day-of-week 4))
+;; &rArr; @2010-04-29T00:00:00.000
+</code></pre></div>
+</dd></dl>
+
+<span id="Function-previous_002dtime"></span><dl>
+<dt id="index-previous_002dtime">Function: <strong>previous-time</strong> <em>anchor relative-time &amp;key accept-anchor</em></dt>
+<dd><span id="index-previous_002dtime-1"></span>
+<p>This function is the reverse of &lsquo;NEXT-TIME&rsquo;.  Please look there for more.
+</p></dd></dl>
+
+<span id="Macro-map_002drelative_002dtimes"></span><dl>
+<dt id="index-map_002drelative_002dtimes">Macro: <strong>map-relative-times</strong> <em>callable anchor relative-time end &amp;key reverse inclusive-p</em></dt>
+</dl>
+
+<span id="Macro-list_002drelative_002dtimes"></span><dl>
+<dt id="index-list_002drelative_002dtimes">Macro: <strong>list-relative-times</strong> <em>anchor relative-time end &amp;key reverse inclusive-p</em></dt>
+</dl>
+
+<span id="Macro-do_002drelative_002dtimes"></span><dl>
+<dt id="index-do_002drelative_002dtimes">Macro: <strong>do-relative-times</strong> <em>var anchor relative-time end &amp;key reverse inclusive-p</em></dt>
+</dl>
+
+<span id="Helper-functions-for-the-current-date"></span><h3 class="section">5.1 Helper functions for the current date</h3>
+
+<p>There are helper functions to get dates relative to the current date:
+</p>
+<dl>
+<dt id="index-this_002dyear">Function: <strong>this-year</strong></dt>
+</dl>
+<dl>
+<dt id="index-this_002dmonth">Function: <strong>this-month</strong></dt>
+</dl>
+<dl>
+<dt id="index-today">Function: <strong>today</strong></dt>
+</dl>
+<dl>
+<dt id="index-this_002dday">Function: <strong>this-day</strong></dt>
+</dl>
+
+<dl>
+<dt id="index-this_002dhour">Function: <strong>this-hour</strong></dt>
+</dl>
+<dl>
+<dt id="index-this_002dminute">Function: <strong>this-minute</strong></dt>
+</dl>
+<dl>
+<dt id="index-this_002dsecond">Function: <strong>this-second</strong></dt>
+</dl>
+<dl>
+<dt id="index-next_002dyear">Function: <strong>next-year</strong></dt>
+</dl>
+<dl>
+<dt id="index-next_002dmonth">Function: <strong>next-month</strong></dt>
+</dl>
+<dl>
+<dt id="index-next_002dday">Function: <strong>next-day</strong></dt>
+</dl>
+<dl>
+<dt id="index-previous_002dyear">Function: <strong>previous-year</strong></dt>
+</dl>
+
+<p>and also:
+</p>
+<dl>
+<dt id="index-next_002dmonday">Function: <strong>next-monday</strong></dt>
+</dl>
+
+<p>up to <code>next-sunday</code>, <code>previous-</code> versions,
+</p>
+
+<dl>
+<dt id="index-year_002dbegin">Function: <strong>year-begin</strong></dt>
+</dl>
+
+<p>and also <code>sunday-week-begin, monday-week-begin, day-begin, hour-begin</code> down to microsecond, and <code>end-</code> versions,
+</p>
+<p>and more.
+</p>
+
+<hr>
+<span id="Time-ranges"></span><div class="header">
+<p>
+Next: <a href="#Time-periods" accesskey="n" rel="next">Time periods</a>, Previous: <a href="#Relative-time" accesskey="p" rel="prev">Relative time</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Time-ranges-1"></span><h2 class="chapter">6 Time ranges</h2>
+
+<span id="Function-time_002drange"></span><dl>
+<dt id="index-time_002drange">Function: <strong>time-range</strong> <em>&amp;rest args</em></dt>
+<dd><span id="index-time_002drange-1"></span>
+<p>Create a <code>time-range</code>.
+</p>
+<p>Params: the <code>time-range</code> struct slots (:begin, :end, :duration…).
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre><code class="lisp">  (time-range :begin (next-day) :end (next-sunday-week))
+  ;; =&gt;
+  #S(PERIODS:TIME-RANGE
+   :FIXED-BEGIN NIL
+   :BEGIN @2023-11-14T00:00:00.000000+01:00
+   :BEGIN-INCLUSIVE-P T
+   :FIXED-END NIL
+   :END @2023-11-19T17:51:58.625785+01:00
+   :END-INCLUSIVE-P NIL
+   :DURATION NIL
+   :ANCHOR NIL)
+</code></pre></div>
+</dd></dl>
+
+<p>Use its accessor functions: <code>time-range-begin</code> etc.
+</p>
+<dl>
+<dt id="index-time_002drange_002dnext">Function: <strong>time-range-next</strong> <em>range</em></dt>
+</dl>
+<dl>
+<dt id="index-time_002drange_002dprevious">Function: <strong>time-range-previous</strong> <em>range</em></dt>
+</dl>
+
+<span id="Function-periods_003atime_002dwithin_002drange_002dp"></span><dl>
+<dt id="index-periods_003atime_002dwithin_002drange_002dp">Function: <strong>periods:time-within-range-p</strong> <em>fixed-time range</em></dt>
+<dd><span id="index-periods_003atime_002dwithin_002drange_002dp-1"></span>
+<p>Return <code>t</code> if <code>fixed-time</code> is with this <code>time-range</code>.
+</p>
+<p>Example:
+</p>
+<p>(time-within-range-p
+   (local-time:now)
+   (time-range :begin (periods:previous-day)
+               :end (periods:next-day)))
+</p></dd></dl>
+<span id="Function-time_002dwithin_002drange_002dp"></span><dl>
+<dt id="index-time_002dwithin_002drange_002dp">Function: <strong>time-within-range-p</strong> <em>fixed-time range</em></dt>
+<dd><span id="index-time_002dwithin_002drange_002dp-1"></span>
+<p>Return <code>t</code> if <code>fixed-time</code> is with this <code>time-range</code>.
+</p>
+<p>Example:
+</p>
+<p>(time-within-range-p
+   (local-time:now)
+   (time-range :begin (previous-day)
+               :end (next-day)))
+</p></dd></dl>
+
+<dl>
+<dt id="index-year_002drange">Function: <strong>year-range</strong> <em>fixed-time</em></dt>
+</dl>
+
+<dl>
+<dt id="index-month_002drange">Function: <strong>month-range</strong> <em>fixed-time</em></dt>
+</dl>
+
+<p>down to <code>second-range</code>.
+</p>
+<hr>
+<span id="Time-periods"></span><div class="header">
+<p>
+Previous: <a href="#Time-ranges" accesskey="p" rel="prev">Time ranges</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Time-periods-1"></span><h2 class="chapter">7 Time periods</h2>
+
+<span id="Macro-with_002dtimestamp_002drange"></span><dl>
+<dt id="index-with_002dtimestamp_002drange">Macro: <strong>with-timestamp-range</strong> <em>(min-symbol max-symbol &amp;optional update) &amp;body body</em></dt>
+<dd><span id="index-with_002dtimestamp_002drange-1"></span>
+<p>Define a context where (1) <code>min-symbol</code> and <code>max-symbol</code> are locally
+bound variables with <code>nil</code> default values and (2) <code>update</code> names a
+lexically bound function which takes a timestamp and updates the
+variables <code>min-symbol</code> and <code>max-symbol</code> so that they respectively hold the
+earliest and latest timestamp after successive invocations. That
+function finally returns its input value. For example, the following
+code builds a <code>time-range</code> instance from a list of dated transactions.
+</p>
+<div class="lisp">
+<pre><code class="lisp">    (with-timestamp-range (earliest latest)
+      (dolist (tt transaction)
+        (update-range (transaction-date tt)))
+      (time-range :begin earliest :end latest :end-inclusive-p t))
+</code></pre></div>
+
+<p>A custom name can be used to nest invocations:
+</p>
+<div class="lisp">
+<pre><code class="lisp">    (with-timestamp-range (earliest latest global-update-range)
+      (dolist (jj journals)
+        (with-timestamp-range (&lt;&lt; &gt;&gt;)
+          (dolist (tt (journal-xact jj))
+            (gloal-update-range
+              (update-range (transaction-date tt))))
+          (format t &quot;Journal earliest / latest: ~A / ~A~%&quot; &lt;&lt; &gt;&gt;)))
+      (format t &quot;Global earliest / latest: ~A / ~A~%&quot; earliest latest))
+</code></pre></div>
+</dd></dl>
+
+<span id="General-purpose"></span><h2 class="chapter">8 General purpose</h2>
+
+<dl>
+<dt id="index-sleep_002duntil">Function: <strong>sleep-until</strong> <em>fixed-time</em></dt>
+</dl>
+
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h5><a id="FOOT1" href="#DOCF1">(1)</a></h3>
+<p>See <a href="http://series.sourceforge.net/">http://series.sourceforge.net/</a>.
+To use the series-enabled functions, load the <small>PERIOD-SERIES</small> ASDF system.</p>
+<h5><a id="FOOT2" href="#DOCF2">(2)</a></h3>
+<p>See
+<a href="http://common-lisp.net/project/local-time/">http://common-lisp.net/project/local-time/</a>.</p>
+</div>
+<hr>
+
+
+
+</body>  <script> HighlightLisp.highlight_auto(); HighlightLisp.paren_match(); </script>
+</html>
